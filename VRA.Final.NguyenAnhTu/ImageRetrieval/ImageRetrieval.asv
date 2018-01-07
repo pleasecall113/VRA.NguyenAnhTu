@@ -1,0 +1,412 @@
+function varargout = ImageRetrieval(varargin)
+% IMAGERETRIEVAL MATLAB code for ImageRetrieval.fig
+%      IMAGERETRIEVAL, by itself, creates a new IMAGERETRIEVAL or raises the existing
+%      singleton*.
+%
+%      H = IMAGERETRIEVAL returns the handle to a new IMAGERETRIEVAL or the handle to
+%      the existing singleton*.
+%
+%      IMAGERETRIEVAL('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in IMAGERETRIEVAL.M with the given input arguments.
+%
+%      IMAGERETRIEVAL('Property','Value',...) creates a new IMAGERETRIEVAL or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before ImageRetrieval_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to ImageRetrieval_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help ImageRetrieval
+
+% Last Modified by GUIDE v2.5 05-Jan-2018 09:01:57
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @ImageRetrieval_OpeningFcn, ...
+                   'gui_OutputFcn',  @ImageRetrieval_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before ImageRetrieval is made visible.
+function ImageRetrieval_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to ImageRetrieval (see VARARGIN)
+
+%An cac axes
+set(handles.axes1,'visible','off');
+set(handles.axes2,'visible','off');
+set(handles.axes3,'visible','off');
+set(handles.queryImg,'visible','off');
+set(handles.cropImg,'visible','off');
+set(handles.axes7,'visible','off');
+set(handles.axes8,'visible','off');
+set(handles.btnNext,'Enable','off') ;
+set(handles.btnBack,'Enable','off') ;
+
+% Choose default command line output for ImageRetrieval
+handles.output = hObject;
+
+% Update handles structure
+guidata(hObject, handles);
+
+% UIWAIT makes ImageRetrieval wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = ImageRetrieval_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+
+% --- Executes on button press in btnBack.
+function btnBack_Callback(hObject, eventdata, handles)
+% hObject    handle to btnBack (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+   global files;
+   global ids;
+   global img;
+
+set(handles.btnNext,'Enable','on') ;
+img=img-5;
+axes(handles.axes1);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img)).name)));
+set(handles.txtImg1,'String',files(ids{1}(img)).name); 
+
+axes(handles.axes2);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img+1)).name)));
+set(handles.txtImg2,'String',files(ids{1}(img+1)).name);
+
+axes(handles.axes3);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img+2)).name)));
+set(handles.txtImg3,'String',files(ids{1}(img+2)).name);
+
+axes(handles.axes7);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img+3)).name)));
+set(handles.txtImg4,'String',files(ids{1}(img+3)).name);
+
+axes(handles.axes8);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img+4)).name)));
+set(handles.txtImg5,'String',files(ids{1}(img+4)).name);
+     
+if(img==1)
+    set(handles.btnBack,'Enable','off') ;
+end
+
+
+% --- Executes on button press in btnNext.
+function btnNext_Callback(hObject, eventdata, handles)
+% hObject    handle to btnNext (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+   global files;
+   global ids;
+   global img;
+
+set(handles.btnBack,'Enable','on') ;
+  
+img=img+5;
+axes(handles.axes1);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img)).name)));
+set(handles.txtImg1,'String',files(ids{1}(img)).name);
+        
+if(img+1<size(ids{1},2))
+    axes(handles.axes2);
+    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+1)).name)));
+    set(handles.txtImg2,'String',files(ids{1}(img+1)).name);
+else
+    cla(handles.axes2);
+    set(handles.btnNext,'Enable','off') ;
+end
+        
+if(img+2<size(ids{1},2))
+    axes(handles.axes3);
+    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+2)).name)));
+    set(handles.txtImg3,'String',files(ids{1}(img+2)).name);
+else
+    cla(handles.axes3);
+    set(handles.btnNext,'Enable','off') ;
+end
+
+if(img+3<size(ids{1},2))
+    axes(handles.axes7);
+    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+3)).name)));
+    set(handles.txtImg4,'String',files(ids{1}(img+3)).name);
+else
+    cla(handles.axes7);
+    set(handles.btnNext,'Enable','off') ;
+end
+
+if(img+4<size(ids{1},2))
+    axes(handles.axes8);
+    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+4)).name)));
+    set(handles.txtImg5,'String',files(ids{1}(img+5)).name);
+else
+    cla(handles.axes8);
+    set(handles.btnNext,'Enable','off') ;
+end
+
+
+
+% --- Executes on button press in btnImgBrowser.
+function btnImgBrowser_Callback(hObject, eventdata, handles)
+% hObject    handle to btnImgBrowser (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global filename;
+%global imgObj ImgQuery;
+%global x l;
+%global handlesImgObj;
+%x=[1 4];
+%l=cell(1,4);
+%handlesImgObj = handles.queryImg; 
+[filename pathname] = uigetfile({'*.jpg';'*.bmp';'*.png'},'File Selector');
+if ~isequal(filename,0)
+image = strcat(pathname, filename);
+cla(handles.queryImg,'reset');
+axes(handles.queryImg);
+imshow(image);
+cla(handles.cropImg,'reset');
+set(handles.cropImg,'visible','off');
+% set(h, 'buttondownfcn', @load_rectangle);
+% load_line();
+else
+    return;
+end
+
+% --- Executes on button press in btnSearch.
+function btnSearch_Callback(hObject, eventdata, handles)
+% hObject    handle to btnSearch (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+if (isempty(get(handles.queryImg, 'Children')))
+    return;
+else
+%% Khai bao bien
+   global files;
+   global ids;
+   global img;
+   global filename;
+   global crop;
+   global imageCrop;
+    addpath('AKM');
+    run('vlfeat\toolbox\vl_setup.m');
+    datasetDir = 'oxford\images\';
+    num_words = 1000000;
+    num_iterations = 5;
+    num_trees = 8;
+    dim = 128;
+    if_weight = 'tfidf';    if_norm = 'l1';
+    if_dist = 'l1';
+    %% Load dac trung SIFT
+        if ~exist('oxford\feat\5k\feature.bin', 'file')
+        features = zeros(128, 2000000);
+        nfeat = 0;
+        files = dir(fullfile(datasetDir, '*.jpg'));
+        nfiles = length(files);
+        features_per_image = zeros(1,nfiles);
+        for i=1:nfiles
+            imgPath = strcat(datasetDir, files(i).name);
+            I = im2single(rgb2gray(imread(imgPath)));
+            I = imresize(I, 0.6);
+            [frame, sift] = vl_covdet(I, 'method', 'Hessian', 'estimateAffineShape', true);
+            if nfeat+size(sift,2) > size(features,2)
+                features = [features zeros(128,1000000)];
+            end
+            features(:,nfeat+1:nfeat+size(sift,2)) = sift;
+            nfeat = nfeat+size(sift,2);
+            features_per_image(i) = size(sift, 2);
+        end
+        features = features(:,1:nfeat);
+        fid = fopen('oxford\feat\5k\feature.bin', 'w');
+        fwrite(fid, features, 'float');
+        fclose(fid);
+        save('oxford\feat\5k\feat_info.mat', 'features_per_image', 'files');
+        end
+        fprintf('Loading SIFT features:\n');
+        file = dir('oxford\feat\5k\feature.bin');
+        fid = fopen('oxford\feat\5k\feature.bin', 'r');
+        fclose(fid);
+        load('oxford\feat\5k\feat_info.mat');
+    %% Chay AKM de xay dung tu dien
+    num_images = length(files);
+    dict_params =  {num_iterations, 'kdt', num_trees};
+    % build the dictionary
+    if exist('oxford\feat\5k\dict.mat', 'file')
+        load('oxford\feat\5k\dict.mat');
+    else        
+        randIndex = randperm(size(features,2));
+        dict_words = ccvBowGetDict(features(:,randIndex(1:100000)), [], [], num_words, 'flat', 'akmeans', ...
+            [], dict_params);
+        save('oxford\feat\5k\dict.mat', 'dict_words');
+    end
+    %% Tinh toan sparse frequency vector
+    dict = ccvBowGetWordsInit(dict_words, 'flat', 'akmeans', [], dict_params);
+    if exist('oxford\feat\5k\words.mat', 'file')
+        load('oxford\feat\5k\words.mat');
+    else
+        words = cell(1, num_images);
+        for i=1:num_images
+            if i==1
+                bIndex = 1;
+            else
+                bIndex = sum(features_per_image(1:i-1))+1;
+            end
+            eIndex = bIndex + features_per_image(i)-1;
+            words{i} = ccvBowGetWords(dict_words, features(:, bIndex:eIndex), [], dict);
+        end;
+        save('oxford\feat\5k\words.mat', 'words');
+    end
+
+    %% Tao inverted file for the images
+    inv_file = ccvInvFileInsert([], words, num_words);
+    ccvInvFileCompStats(inv_file, if_weight, if_norm);
+    %% Query images 
+    k = str2num(strtok(filename,'.jpg'));
+    
+    q_files = dir(fullfile('oxford\groundtruth', '*query.txt'));
+    ntop = 0;
+    % load anh query
+    fid = fopen(strcat('oxford\groundtruth\', q_files(k).name), 'r');
+    str = fgetl(fid);
+    [image_name, remain] = strtok(str, ' ');
+    fclose(fid);
+    numbers = str2num(remain);
+    x1 = numbers(1);
+    y1 = numbers(2);
+    x2 = numbers(3);
+    y2 = numbers(4);
+    file = strcat('oxford\images\', image_name(6:end), '.jpg');
+     if ~isempty(get(handles.cropImg, 'Children'))
+        I = im2single(rgb2gray(getimage(handles.cropImg)));
+     else
+        I = im2single(rgb2gray(imread(file)));
+    end
+    % Tinh dac trung SIFT cho anh query
+    [frame, sift] = vl_covdet(I, 'method', 'Hessian', 'estimateAffineShape', true);
+    sift = sift(:,(frame(1,:)<=x2) &  (frame(1,:) >= x1) & (frame(2,:) <= y2) & (frame(2,:) >= y1));
+ 
+    % Tinh Word-ID
+    q_words = cell(1,1);
+    q_words{1} = ccvBowGetWords(dict_words, double(sift), [], dict);
+    [ids dists] = ccvInvFileSearch(inv_file, q_words(1), if_weight, if_norm, if_dist, ntop);
+    fid = fopen('oxford\groundtruth\rank_list.txt', 'w');
+    img = 1;
+              axes(handles.axes1);
+              imshow(imread(fullfile('oxford\images\', files(ids{1}(img)).name)));
+              set(handles.txtImg1,'String',num2str(files(ids{1}(img)).name));
+              axes(handles.axes2);
+              imshow(imread(fullfile('oxford\images\', files(ids{1}(img+1)).name)));
+              set(handles.txtImg2,'String',files(ids{1}(img+1)).name);
+              axes(handles.axes3);
+              imshow(imread(fullfile('oxford\images\', files(ids{1}(img+2)).name)));
+              set(handles.txtImg3,'String',files(ids{1}(img+2)).name);
+              axes(handles.axes7);
+              imshow(imread(fullfile('oxford\images\', files(ids{1}(img+3)).name)));
+              set(handles.txtImg4,'String',files(ids{1}(img+3)).name);
+              axes(handles.axes8);
+              imshow(imread(fullfile('oxford\images\', files(ids{1}(img+4)).name)));
+              set(handles.txtImg5,'String',files(ids{1}(img+4)).name);
+              set(handles.btnNext,'Enable','on') ;
+              set(handles.btnBack,'Enable','on') ;
+              if(size(ids{1},2)<=5)
+                 set(handles.btnNext,'Enable','off') ;
+              end
+                 set(handles.btnBack,'Enable','off') ;
+    for i=1:size(ids{1},2)
+        fprintf(fid, '%s\n', files(ids{1}(i)).name(1:end-4));
+    end
+    fclose(fid);
+    script = ['oxford\groundtruth\Test.exe oxford\groundtruth\', ...
+        q_files(k).name(1:end-10), ...
+        ' oxford\groundtruth\rank_list.txt',...
+        ' >oxford\result\', image_name(6:end), '_result.txt']; 
+    system(script);
+    r_files = dir(fullfile('oxford\result\', '*.txt'));
+    acc = [];
+    for i=1:length(r_files)
+        file = ['oxford\result\' r_files(i).name];
+        fid = fopen(file, 'r');
+        acc = [acc fscanf(fid, '%f')];
+        fclose(fid);
+    end  
+    set(handles.txtAcc,'String',num2str(mean(acc)*100,'%g%%'));%Hien thi do chinh xac
+% clear inv file
+ccvInvFileClean(inv_file);
+end
+
+% %% Lay toa do
+% function load_rectangle(hObject, eventdata)
+% global handlesImgObj x;
+% rect = getrect(handlesImgObj);
+% 
+% X1 = round(rect(1));
+% Y1 = round(rect(2));
+% X2 = round(X1 + rect(3));
+% Y2 = round(Y1 + rect(4));
+% 
+% x=[X1 X2 Y1 Y2];
+% load_line();
+% 
+% %% Ve vung chon
+% function load_line()
+% global handlesImgObj x l;
+% if ~isempty(l{1})
+%     for i=1:4
+%         delete(l{i});
+%     end
+% end
+% axes(handlesImgObj);
+% hold on;
+% l{1}=plot([x(1) x(2)], [x(3) x(3)], 'g');
+% l{2}=plot([x(2) x(2)], [x(3) x(4)], 'g');
+% l{3}=plot([x(2) x(1)], [x(4) x(4)], 'g');
+% l{4}=plot([x(1) x(1)], [x(4) x(3)], 'g');
+% hold off;
+
+% --- Executes on button press in btnCrop.
+function btnCrop_Callback(hObject, eventdata, handles)
+% hObject    handle to btnCrop (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global imageCrop;
+if (isempty(get(handles.queryImg, 'Children')))
+    return;
+else 
+%I = getimage(handles.queryImg);
+hold on;
+axes(handles.queryImg);
+%imshow(I);
+imageCrop = imcrop(getimage(handles.queryImg));
+axes(handles.cropImg);
+cla(handles.cropImg,'reset');
+
+imshow(imageCrop);
+hold off;
+end

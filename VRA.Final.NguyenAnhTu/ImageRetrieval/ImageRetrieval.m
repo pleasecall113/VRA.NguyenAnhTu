@@ -1,39 +1,39 @@
-function varargout = ImageBrowser(varargin)
-%IMAGEBROWSER MATLAB code file for ImageBrowser.fig
-%      IMAGEBROWSER, by itself, creates a new IMAGEBROWSER or raises the existing
+function varargout = ImageRetrieval(varargin)
+% IMAGERETRIEVAL MATLAB code for ImageRetrieval.fig
+%      IMAGERETRIEVAL, by itself, creates a new IMAGERETRIEVAL or raises the existing
 %      singleton*.
 %
-%      H = IMAGEBROWSER returns the handle to a new IMAGEBROWSER or the handle to
+%      H = IMAGERETRIEVAL returns the handle to a new IMAGERETRIEVAL or the handle to
 %      the existing singleton*.
 %
-%      IMAGEBROWSER('Property','Value',...) creates a new IMAGEBROWSER using the
-%      given property value pairs. Unrecognized properties are passed via
-%      varargin to ImageBrowser_OpeningFcn.  This calling syntax produces a
-%      warning when there is an existing singleton*.
+%      IMAGERETRIEVAL('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in IMAGERETRIEVAL.M with the given input arguments.
 %
-%      IMAGEBROWSER('CALLBACK') and IMAGEBROWSER('CALLBACK',hObject,...) call the
-%      local function named CALLBACK in IMAGEBROWSER.M with the given input
-%      arguments.
+%      IMAGERETRIEVAL('Property','Value',...) creates a new IMAGERETRIEVAL or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before ImageRetrieval_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to ImageRetrieval_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help ImageBrowser
+% Edit the above text to modify the response to help ImageRetrieval
 
-% Last Modified by GUIDE v2.5 29-Dec-2017 23:58:24
+% Last Modified by GUIDE v2.5 05-Jan-2018 09:01:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @ImageBrowser_OpeningFcn, ...
-                   'gui_OutputFcn',  @ImageBrowser_OutputFcn, ...
-                   'gui_LayoutFcn',  [], ...
+                   'gui_OpeningFcn', @ImageRetrieval_OpeningFcn, ...
+                   'gui_OutputFcn',  @ImageRetrieval_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
-   gui_State.gui_Callback = str2func(varargin{1});
+    gui_State.gui_Callback = str2func(varargin{1});
 end
 
 if nargout
@@ -44,34 +44,37 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before ImageBrowser is made visible.
-function ImageBrowser_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before ImageRetrieval is made visible.
+function ImageRetrieval_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   unrecognized PropertyName/PropertyValue pairs from the
-%            command line (see VARARGIN)
+% varargin   command line arguments to ImageRetrieval (see VARARGIN)
+
 %An cac axes
 set(handles.axes1,'visible','off');
 set(handles.axes2,'visible','off');
 set(handles.axes3,'visible','off');
 set(handles.queryImg,'visible','off');
+set(handles.cropImg,'visible','off');
 set(handles.axes7,'visible','off');
 set(handles.axes8,'visible','off');
+set(handles.btnNext,'Enable','off') ;
+set(handles.btnBack,'Enable','off') ;
 
-% Choose default command line output for ImageBrowser
+% Choose default command line output for ImageRetrieval
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes ImageBrowser wait for user response (see UIRESUME)
+% UIWAIT makes ImageRetrieval wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = ImageBrowser_OutputFcn(hObject, eventdata, handles)
+function varargout = ImageRetrieval_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -80,28 +83,127 @@ function varargout = ImageBrowser_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-   
-% Xu ly nut load anh
+
+% --- Executes on button press in btnBack.
+function btnBack_Callback(hObject, eventdata, handles)
+% hObject    handle to btnBack (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+   global files;
+   global ids;
+   global img;
+
+set(handles.btnNext,'Enable','on') ;
+img=img-5;
+axes(handles.axes1);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img)).name)));
+set(handles.txtImg1,'String',files(ids{1}(img)).name); 
+
+axes(handles.axes2);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img+1)).name)));
+set(handles.txtImg2,'String',files(ids{1}(img+1)).name);
+
+axes(handles.axes3);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img+2)).name)));
+set(handles.txtImg3,'String',files(ids{1}(img+2)).name);
+
+axes(handles.axes7);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img+3)).name)));
+set(handles.txtImg4,'String',files(ids{1}(img+3)).name);
+
+axes(handles.axes8);
+cla(handles.axes8);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img+4)).name)));
+set(handles.txtImg5,'String',files(ids{1}(img+4)).name);
+     
+if(img==1)
+    set(handles.btnBack,'Enable','off') ;
+end
+
+
+% --- Executes on button press in btnNext.
+function btnNext_Callback(hObject, eventdata, handles)
+% hObject    handle to btnNext (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+   global files;
+   global ids;
+   global img;
+set(handles.btnBack,'Enable','on') ; 
+img=img+5;
+axes(handles.axes1);
+imshow(imread(fullfile('oxford\images\', files(ids{1}(img)).name)));
+set(handles.txtImg1,'String',files(ids{1}(img)).name);
+        
+if(img+1<size(ids{1},2))
+    axes(handles.axes2);
+    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+1)).name)));
+    set(handles.txtImg2,'String',files(ids{1}(img+1)).name);
+else
+    cla(handles.axes2);
+    set(handles.btnNext,'Enable','off') ;
+end
+        
+if(img+2<size(ids{1},2))
+    axes(handles.axes3);
+    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+2)).name)));
+    set(handles.txtImg3,'String',files(ids{1}(img+2)).name);
+else
+    cla(handles.axes3);
+    set(handles.btnNext,'Enable','off') ;
+end
+
+if(img+3<size(ids{1},2))
+    axes(handles.axes7);
+    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+3)).name)));
+    set(handles.txtImg4,'String',files(ids{1}(img+3)).name);
+else
+    cla(handles.axes7);
+    set(handles.btnNext,'Enable','off') ;
+end
+
+if(img+4<size(ids{1},2))
+    axes(handles.axes8);
+    cla(handles.axes8);
+    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+4)).name)));
+    set(handles.txtImg5,'String',files(ids{1}(img+5)).name);
+else
+    cla(handles.axes8);
+    set(handles.btnNext,'Enable','off') ;
+end
+
+% --- Executes on button press in btnImgBrowser.
 function btnImgBrowser_Callback(hObject, eventdata, handles)
 % hObject    handle to btnImgBrowser (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global filename;
+global filename; 
 [filename pathname] = uigetfile({'*.jpg';'*.bmp';'*.png'},'File Selector');
+if ~isequal(filename,0)
 image = strcat(pathname, filename);
+cla(handles.queryImg,'reset');
 axes(handles.queryImg);
 imshow(image);
+cla(handles.cropImg,'reset');
+set(handles.cropImg,'visible','off');
+else
+    return;
+end
 
-% Xu ly nut tim kiem
+% --- Executes on button press in btnSearch.
 function btnSearch_Callback(hObject, eventdata, handles)
 % hObject    handle to btnSearch (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-    
-    %% Khai bao bien
+if (isempty(get(handles.queryImg, 'Children')))
+    return;
+else
+%% Khai bao bien
    global files;
    global ids;
    global img;
+   global filename;
+   global imageCrop;
     addpath('AKM');
     run('vlfeat\toolbox\vl_setup.m');
     datasetDir = 'oxford\images\';
@@ -111,7 +213,6 @@ function btnSearch_Callback(hObject, eventdata, handles)
     dim = 128;
     if_weight = 'tfidf';    if_norm = 'l1';
     if_dist = 'l1';
-    global filename;
     %% Load dac trung SIFT
         if ~exist('oxford\feat\5k\feature.bin', 'file')
         features = zeros(128, 2000000);
@@ -190,8 +291,12 @@ function btnSearch_Callback(hObject, eventdata, handles)
     y1 = numbers(2);
     x2 = numbers(3);
     y2 = numbers(4);
-    file = strcat('oxford\images\', image_name(6:end), '.jpg');  
-    I = im2single(rgb2gray(imread(file)));
+    file = strcat('oxford\images\', image_name(6:end), '.jpg');
+     if ~isempty(get(handles.cropImg, 'Children'))
+        I = im2single(rgb2gray(getimage(handles.cropImg)));
+     else
+        I = im2single(rgb2gray(imread(file)));
+    end
     % Tinh dac trung SIFT cho anh query
     [frame, sift] = vl_covdet(I, 'method', 'Hessian', 'estimateAffineShape', true);
     sift = sift(:,(frame(1,:)<=x2) &  (frame(1,:) >= x1) & (frame(2,:) <= y2) & (frame(2,:) >= y1));
@@ -215,8 +320,11 @@ function btnSearch_Callback(hObject, eventdata, handles)
               imshow(imread(fullfile('oxford\images\', files(ids{1}(img+3)).name)));
               set(handles.txtImg4,'String',files(ids{1}(img+3)).name);
               axes(handles.axes8);
+              cla(handles.axes8);
               imshow(imread(fullfile('oxford\images\', files(ids{1}(img+4)).name)));
               set(handles.txtImg5,'String',files(ids{1}(img+4)).name);
+              set(handles.btnNext,'Enable','on') ;
+              set(handles.btnBack,'Enable','on') ;
               if(size(ids{1},2)<=5)
                  set(handles.btnNext,'Enable','off') ;
               end
@@ -237,96 +345,25 @@ function btnSearch_Callback(hObject, eventdata, handles)
         fid = fopen(file, 'r');
         acc = [acc fscanf(fid, '%f')];
         fclose(fid);
-    end  
+    end
     set(handles.txtAcc,'String',num2str(mean(acc)*100,'%g%%'));%Hien thi do chinh xac
 % clear inv file
 ccvInvFileClean(inv_file);
+end
 
-
-% Xu ly nut lui
-function btnBack_Callback(hObject, eventdata, handles)
-% hObject    handle to btnBack (see GCBO)
+% --- Executes on button press in btnCrop.
+function btnCrop_Callback(hObject, eventdata, handles)
+% hObject    handle to btnCrop (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-   global files;
-   global ids;
-   global img;
+global imageCrop;
 
-set(handles.btnNext,'Enable','on') ;
-img=img-5;
-axes(handles.axes1);
-imshow(imread(fullfile('oxford\images\', files(ids{1}(img)).name)));
-set(handles.txtImg1,'String',files(ids{1}(img)).name); 
-
-axes(handles.axes2);
-imshow(imread(fullfile('oxford\images\', files(ids{1}(img+1)).name)));
-set(handles.txtImg2,'String',files(ids{1}(img+1)).name);
-
-axes(handles.axes3);
-imshow(imread(fullfile('oxford\images\', files(ids{1}(img+2)).name)));
-set(handles.txtImg3,'String',files(ids{1}(img+2)).name);
-
-axes(handles.axes7);
-imshow(imread(fullfile('oxford\images\', files(ids{1}(img+3)).name)));
-set(handles.txtImg4,'String',files(ids{1}(img+3)).name);
-
-axes(handles.axes8);
-imshow(imread(fullfile('oxford\images\', files(ids{1}(img+4)).name)));
-set(handles.txtImg5,'String',files(ids{1}(img+4)).name);
-     
-if(img==1)
-    set(handles.btnBack,'Enable','off') ;
-end
-
-
-% Xu ly nut toi
-function btnNext_Callback(hObject, eventdata, handles)
-% hObject    handle to btnNext (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-   global files;
-   global ids;
-   global img;
-
-set(handles.btnBack,'Enable','on') ;
-  
-img=img+5;
-axes(handles.axes1);
-imshow(imread(fullfile('oxford\images\', files(ids{1}(img)).name)));
-set(handles.txtImg1,'String',files(ids{1}(img)).name);
-        
-if(img+1<size(ids{1},2))
-    axes(handles.axes2);
-    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+1)).name)));
-    set(handles.txtImg2,'String',files(ids{1}(img+1)).name);
-else
-    cla(handles.axes2);
-    set(handles.btnNext,'Enable','off') ;
-end
-        
-if(img+2<size(ids{1},2))
-    axes(handles.axes3);
-    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+2)).name)));
-    set(handles.txtImg3,'String',files(ids{1}(img+2)).name);
-else
-    cla(handles.axes3);
-    set(handles.btnNext,'Enable','off') ;
-end
-
-if(img+3<size(ids{1},2))
-    axes(handles.axes7);
-    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+3)).name)));
-    set(handles.txtImg4,'String',files(ids{1}(img+3)).name);
-else
-    cla(handles.axes7);
-    set(handles.btnNext,'Enable','off') ;
-end
-
-if(img+4<size(ids{1},2))
-    axes(handles.axes8);
-    imshow(imread(fullfile('oxford\images\', files(ids{1}(img+4)).name)));
-    set(handles.txtImg5,'String',files(ids{1}(img+5)).name);
-else
-    cla(handles.axes8);
-    set(handles.btnNext,'Enable','off') ;
+if (isempty(get(handles.queryImg, 'Children')))
+    return;
+else 
+hold on;
+axes(handles.queryImg);
+imageCrop = imcrop();
+imshow(imageCrop, 'Parent', handles.cropImg);
+hold off;
 end
